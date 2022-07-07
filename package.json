@@ -1,0 +1,29 @@
+{
+  "name": "qrcode-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "dev": "ts-node src/index.ts",
+    "watch": "tsc --watch",
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "postbuild": "sed -i -e \"s/ts-node/node/g\" dist/index.js && chmod +x dist/index.js",
+    "link": "ln -sf \"$(pwd)/dist/index.js\" \"$HOME/.scripts/qrcode\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cli-color": "^2.0.2",
+    "@types/qr-image": "^3.2.5",
+    "ts-node": "^10.8.2",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "cli-color": "^2.0.3",
+    "qr-image": "^3.2.0"
+  }
+}
