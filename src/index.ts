@@ -22,7 +22,7 @@ const allowedExts: string[] = ['.png', '.svg', '.pdf', '.eps']
 let rli: rl.Interface
 
 async function readline(text: string): Promise<string> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         if (text)
         process.stdout.write(text)
         if (!rli)
@@ -36,9 +36,9 @@ async function readline(text: string): Promise<string> {
     })
 }
 
-async function generateQrCode(url: string, type: qr.image_type = 'png') {
-    return qr.imageSync(url, { type })
-}
+//async function generateQrCode(url: string, type: qr.image_type = 'png') {
+//    return qr.imageSync(url, { type })
+//}
 
 function parseFlag(flag: string): string {
     flag = flag.replace(/^-?-/, '')
@@ -51,10 +51,10 @@ function parseFlag(flag: string): string {
 function parseArgv(argv: string[]): { args: string[], flags: Flags } {
     argv = argv.splice(2)
     const flags: any = {}
-    
+
     for (let i = 0; i < argv.length; i++) {
         const arg = argv[i]
-        
+
         // start of flag
         if (arg[0] === '-') {
             const key: string = parseFlag(arg)
@@ -72,7 +72,7 @@ function parseArgv(argv: string[]): { args: string[], flags: Flags } {
             i++
         }
     }
-    
+
     return {
         args: argv.filter(Boolean),
         flags: flags as Flags
@@ -80,7 +80,7 @@ function parseArgv(argv: string[]): { args: string[], flags: Flags } {
 }
 
 (async ({ argv, stdout, stderr }: NodeJS.Process) => {
-    const { args, flags } = parseArgv(argv)
+    const { flags } = parseArgv(argv)
     let { url, out }: Flags = flags
 
     if (!url)
@@ -100,7 +100,7 @@ function parseArgv(argv: string[]): { args: string[], flags: Flags } {
     const filePath: string = path.format(outFile)
 
     try {
-        fs.writeFileSync(filePath, await qr.imageSync(url, {
+        fs.writeFileSync(filePath, qr.imageSync(url, {
             ec_level: 'L',
             type: outFile.ext.replace(/^\./, '') as qr.image_type,
             size: 400,
